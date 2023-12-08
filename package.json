@@ -1,0 +1,22 @@
+{
+  "name": "color",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daniel-Livingston/color.git"
+  },
+  "keywords": [
+    "color"
+  ],
+  "author": "Daniel Livingston",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Daniel-Livingston/color/issues"
+  },
+  "homepage": "https://github.com/Daniel-Livingston/color#readme"
+}
