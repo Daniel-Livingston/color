@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "npx tsc",
-    "test": "npm run test"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,10 @@
     "url": "https://github.com/Daniel-Livingston/color/issues"
   },
   "homepage": "https://github.com/Daniel-Livingston/color#readme",
-  "dependencies": {
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
     "typescript": "^5.3.3"
   }
 }
