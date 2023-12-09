@@ -2,8 +2,14 @@
   "name": "color",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "npx tsc",
     "test": "npm run test"
   },
   "repository": {
@@ -18,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/Daniel-Livingston/color/issues"
   },
-  "homepage": "https://github.com/Daniel-Livingston/color#readme"
+  "homepage": "https://github.com/Daniel-Livingston/color#readme",
+  "dependencies": {
+    "typescript": "^5.3.3"
+  }
 }
