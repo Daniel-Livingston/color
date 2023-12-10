@@ -1,3 +1,14 @@
+type ColorParam =
+  | string
+  | { c: number; m: number; y: number; k: number }
+  | { h: number; s: number; l: number }
+  | { h: number; s: number; v: number }
+  | { h: number; w: number; b: number }
+  | { r: number; g: number; b: number };
+
+/**
+ * A color within a specific color space.
+ */
 export default abstract class Color {
   protected _c: number | null = null;
   protected _m: number | null = null;
@@ -13,31 +24,102 @@ export default abstract class Color {
   protected _b: number | null = null;
   protected _hex: string | null = null;
 
-  constructor(
-    param:
-      | string
-      | { c: number; m: number; y: number; k: number }
-      | { h: number; s: number; l: number }
-      | { h: number; s: number; v: number }
-      | { h: number; w: number; b: number }
-      | { r: number; g: number; b: number }
-  ) {}
+  /**
+   * An object representing a color or an equivalent string representation.
+   *
+   * e.g., `new Color('#000')`, `new Color({r: 0, g: 0, b: 0})`, and `new Color('rgb(0, 0, 0)')` are equivalent.
+   *
+   * @param param A color or a string representation of a color.
+   */
+  constructor(param: ColorParam) {}
 
+  /**
+   * Convert a color to the CMYK color space.
+   */
   abstract cmyk(): Color;
+
+  /**
+   * Convert a color to the HSL color space.
+   */
   abstract hsl(): Color;
+
+  /**
+   * Convert a color to the HSV color space.
+   */
   abstract hsv(): Color;
+
+  /**
+   * Convert a color to the HWB color space.
+   */
   abstract hwb(): Color;
+
+  /**
+   * Convert a color to the RGB color space.
+   */
   abstract rgb(): Color;
+
+  /**
+   * The array form of a color in the current color space.
+   *
+   * e.g., `color('#000').cmyk().array` returns `[0, 0, 0, 1]`.
+   *
+   * @readonly
+   */
   abstract get array(): number[];
+
+  /**
+   * The object form of a color in the current color space.
+   *
+   * e.g., `color('#000').cmyk().object` returns `{ c: 0, m: 0, y: 0, k: 1 }`.
+   *
+   * @readonly
+   */
   abstract get object(): { [key: string]: number };
+
+  /**
+   * The string form of a color in the current color space.
+   *
+   * e.g., `color('#000').cmyk().string` returns `cmyk(0, 0, 0, 1)`.
+   *
+   * @readonly
+   */
   abstract get string(): string;
+
+  /**
+   * Get the CMYK values for the color.
+   */
   protected abstract _cmyk(): [number, number, number, number];
+
+  /**
+   * Get the HSL values for the color.
+   */
   protected abstract _hsl(): [number, number, number];
+
+  /**
+   * Get the HSV values for the color.
+   */
   protected abstract _hsv(): [number, number, number];
+
+  /**
+   * Get the HWB values for the color.
+   */
   protected abstract _hwb(): [number, number, number];
+
+  /**
+   * Get the RGB values for the color.
+   */
   protected abstract _rgb(): [number, number, number];
+
+  /**
+   * Parse a color string.
+   */
   protected abstract _parse(color: string): void;
 
+  /**
+   * The cyan value for the color.
+   *
+   * @readonly
+   */
   get cyan(): number {
     if (this._c !== null) {
       return this._c;
@@ -50,6 +132,11 @@ export default abstract class Color {
     return (this._c = c);
   }
 
+  /**
+   * The magenta value for the color.
+   *
+   * @readonly
+   */
   get magenta(): number {
     if (this._m !== null) {
       return this._m;
@@ -62,6 +149,11 @@ export default abstract class Color {
     return (this._m = m);
   }
 
+  /**
+   * The yellow value for the color.
+   *
+   * @readonly
+   */
   get yellow(): number {
     if (this._y !== null) {
       return this._y;
@@ -74,18 +166,11 @@ export default abstract class Color {
     return (this._y = y);
   }
 
-  get key(): number {
-    if (this._k !== null) {
-      return this._k;
-    }
-
-    const [c, m, y, k] = this._cmyk();
-    this._c = c;
-    this._m = m;
-    this._y = y;
-    return (this._k = k);
-  }
-
+  /**
+   * The hue value for the color.
+   *
+   * @readonly
+   */
   get hue(): number {
     if (this._h !== null) {
       return this._h;
@@ -97,6 +182,11 @@ export default abstract class Color {
     return (this._h = h);
   }
 
+  /**
+   * The saturation value for the color.
+   *
+   * @readonly
+   */
   get saturation(): number {
     if (this._s !== null) {
       return this._s;
@@ -108,6 +198,11 @@ export default abstract class Color {
     return (this._s = s);
   }
 
+  /**
+   * The lightness value for the color.
+   *
+   * @readonly
+   */
   get lightness(): number {
     if (this._l !== null) {
       return this._l;
@@ -119,6 +214,11 @@ export default abstract class Color {
     return (this._l = l);
   }
 
+  /**
+   * The brightness value for the color.
+   *
+   * @readonly
+   */
   get brightness(): number {
     if (this._v !== null) {
       return this._v;
@@ -130,6 +230,11 @@ export default abstract class Color {
     return (this._v = v);
   }
 
+  /**
+   * The whiteness value for the color.
+   *
+   * @readonly
+   */
   get whiteness(): number {
     if (this._w !== null) {
       return this._w;
@@ -141,6 +246,11 @@ export default abstract class Color {
     return (this._w = w);
   }
 
+  /**
+   * The blackness value for the color.
+   *
+   * @readonly
+   */
   get blackness(): number {
     if (this._k !== null) {
       return this._k;
@@ -152,6 +262,11 @@ export default abstract class Color {
     return (this._k = b);
   }
 
+  /**
+   * The red value for the color.
+   *
+   * @readonly
+   */
   get red(): number {
     if (this._r !== null) {
       return this._r;
@@ -163,6 +278,11 @@ export default abstract class Color {
     return (this._r = r);
   }
 
+  /**
+   * The green value for the color.
+   *
+   * @readonly
+   */
   get green(): number {
     if (this._g !== null) {
       return this._g;
@@ -174,6 +294,11 @@ export default abstract class Color {
     return (this._g = g);
   }
 
+  /**
+   * The blue value for the color.
+   *
+   * @readonly
+   */
   get blue(): number {
     if (this._b !== null) {
       return this._b;
@@ -185,6 +310,11 @@ export default abstract class Color {
     return (this._b = b);
   }
 
+  /**
+   * The hex value for the color.
+   *
+   * @readonly
+   */
   get hex(): string {
     if (this._hex !== null) {
       return this._hex;
@@ -199,6 +329,7 @@ export default abstract class Color {
       .padStart(2, "0")}${blue.toString(16).padStart(2, "0")}`);
   }
 
+  /** A helper function to convert HSV values to RGB values. */
   protected static hsvToRgb(
     h: number,
     s: number,
@@ -254,6 +385,7 @@ export default abstract class Color {
     return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
   }
 
+  /** A helper function to convert RGB values to CMYK values. */
   protected static rgbToCmyk(
     r: number,
     g: number,
@@ -281,6 +413,7 @@ export default abstract class Color {
     ];
   }
 
+  /** A helper function to convert RGB values to HSL values. */
   protected static rgbToHsl(
     r: number,
     g: number,
@@ -319,6 +452,7 @@ export default abstract class Color {
     return [h, Math.round(s * 100) / 100, Math.round(l * 100) / 100];
   }
 
+  /** A helper function to convert RGB values to HSV values. */
   protected static rgbToHsv(
     r: number,
     g: number,
@@ -331,6 +465,7 @@ export default abstract class Color {
     return [h, Math.round(s2 * 100) / 100, Math.round(v * 100) / 100];
   }
 
+  /** A helper function to convert RGB values to HWB values. */
   protected static rgbToHwb(
     r: number,
     g: number,

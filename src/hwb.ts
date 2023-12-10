@@ -4,6 +4,9 @@ import HSL from "./hsl";
 import HSV from "./hsv";
 import RGB from "./rgb";
 
+/**
+ * A color in the HWB color space.
+ */
 export default class HWB extends Color {
   constructor(param: string | { h: number; w: number; b: number }) {
     super(param);

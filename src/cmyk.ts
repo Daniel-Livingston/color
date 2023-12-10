@@ -4,6 +4,9 @@ import HSV from "./hsv";
 import HWB from "./hwb";
 import RGB from "./rgb";
 
+/**
+ * A color in the CMYK color space.
+ */
 export default class CMYK extends Color {
   constructor(param: string | { c: number; m: number; y: number; k: number }) {
     super(param);

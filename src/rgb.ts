@@ -4,6 +4,9 @@ import HSL from "./hsl";
 import HSV from "./hsv";
 import HWB from "./hwb";
 
+/**
+ * A color in the RGB color space.
+ */
 export default class RGB extends Color {
   constructor(param: string | { r: number; g: number; b: number }) {
     super(param);
@@ -68,6 +71,7 @@ export default class RGB extends Color {
     throw new Error("Invalid color");
   }
 
+  /** A helper function to parse a Hex value. e.g., `#000` or `#000000`. */
   private _parseHex(color: string) {
     if (color.length === 4) {
       this._parseHexShort(color);
@@ -82,6 +86,7 @@ export default class RGB extends Color {
     throw new Error("Invalid color");
   }
 
+  /** A helper function to parse a Hex value written in shorthand. e.g., `#000`. */
   private _parseHexShort(color: string) {
     const r = parseInt(color[1], 16);
     const g = parseInt(color[2], 16);
@@ -92,6 +97,7 @@ export default class RGB extends Color {
     this._b = b * 17;
   }
 
+  /** A helper function to parse a Hex value written in long form. e.g., `#000000`. */
   private _parseHexLong(color: string) {
     const r = parseInt(color.slice(1, 3), 16);
     const g = parseInt(color.slice(3, 5), 16);
@@ -102,6 +108,7 @@ export default class RGB extends Color {
     this._b = b;
   }
 
+  /** A helper function to parse an RGB value. e.g., `rgb(0, 0, 0)`. */
   private _parseRgb(color: string) {
     const match = color.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 
