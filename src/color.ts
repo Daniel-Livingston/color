@@ -291,6 +291,144 @@ export default abstract class Color {
     return values;
   }
 
+  change(options: Partial<AdjustableColorValues>): Color {
+    if ("red" in options || "green" in options || "blue" in options) {
+      const newValues = this._changeRgb(options);
+      return new RGB(newValues)[this._space]();
+    }
+
+    if ("whiteness" in options || "blackness" in options) {
+      const newValues = this._changeHwb(options);
+      return new HWB(newValues)[this._space]();
+    }
+
+    if ("hue" in options || "saturation" in options || "lightness" in options) {
+      const newValues = this._changeHsl(options);
+      return new HSL(newValues)[this._space]();
+    }
+
+    return this;
+  }
+
+  /** A helper function to get the changed RGB values. */
+  private _changeRgb({
+    red = 0,
+    green = 0,
+    blue = 0,
+  }: { red?: number; green?: number; blue?: number } = {}) {
+    const values = { r: this.red, g: this.green, b: this.blue };
+
+    if (red) {
+      if (red < 0 || red > 255) {
+        throw new RangeError(
+          `Invalid red value: ${red}. Must be between 0 and 255 inclusive.`
+        );
+      }
+
+      values.r = red;
+    }
+
+    if (green) {
+      if (green < 0 || green > 255) {
+        throw new RangeError(
+          `Invalid green value: ${green}. Must be between 0 and 255 inclusive.`
+        );
+      }
+
+      values.g = green;
+    }
+
+    if (blue) {
+      if (blue < 0 || blue > 255) {
+        throw new RangeError(
+          `Invalid blue value: ${blue}. Must be between 0 and 255 inclusive.`
+        );
+      }
+
+      values.b = blue;
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the changed HSL values. */
+  private _changeHsl({
+    hue = 0,
+    saturation = 0,
+    lightness = 0,
+  }: { hue?: number; saturation?: number; lightness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      s: this.saturation,
+      l: this.lightness,
+    };
+
+    if (hue) {
+      values.h = hue % 360;
+    }
+
+    if (saturation) {
+      if (saturation < 0 || saturation > 1) {
+        throw new RangeError(
+          `Invalid saturation value: ${saturation}. Must be between 0 and 1 inclusive.`
+        );
+      }
+
+      values.s = saturation;
+    }
+
+    if (lightness) {
+      if (lightness < 0 || lightness > 1) {
+        throw new RangeError(
+          `Invalid lightness value: ${lightness}. Must be between 0 and 1 inclusive.`
+        );
+      }
+
+      values.l = lightness;
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the changed HWB values. */
+  private _changeHwb({
+    hue = 0,
+    whiteness = 0,
+    blackness = 0,
+  }: { hue?: number; whiteness?: number; blackness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      w: this.whiteness,
+      b: this.blackness,
+    };
+
+    if (hue) {
+      values.h = hue % 360;
+    }
+
+    if (whiteness) {
+      if (whiteness < 0 || whiteness > 1) {
+        throw new RangeError(
+          `Invalid whiteness value: ${whiteness}. Must be between 0 and 1 inclusive.`
+        );
+      }
+
+      values.w = whiteness;
+    }
+
+    if (blackness) {
+      if (blackness < 0 || blackness > 1) {
+        throw new RangeError(
+          `Invalid blackness value: ${blackness}. Must be between 0 and 1 inclusive.`
+        );
+      }
+
+      values.b = blackness;
+    }
+
+    return values;
+  }
+
   /**
    * The complement of this color in the same color space.
    */
