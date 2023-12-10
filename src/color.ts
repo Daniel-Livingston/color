@@ -292,6 +292,13 @@ export default abstract class Color {
   }
 
   /**
+   * The complement of this color in the same color space.
+   */
+  get complement(): Color {
+    return this.adjust({ hue: 180 });
+  }
+
+  /**
    * The cyan value for the color.
    *
    * @readonly
