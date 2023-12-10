@@ -15,7 +15,14 @@ export default class HSL extends Color {
     if (typeof param === "string") {
       this._parse(param);
     } else {
-      this._h = param.h;
+      if (param.s === 0) {
+        this._h = 0;
+        this._s = 0;
+        this._l = param.l;
+        return;
+      }
+
+      this._h = param.h >= 0 ? param.h % 360 : (param.h % 360) + 360;
       this._s = param.s;
       this._l = param.l;
     }

@@ -312,13 +312,13 @@ export default abstract class Color {
 
   /** A helper function to get the changed RGB values. */
   private _changeRgb({
-    red = 0,
-    green = 0,
-    blue = 0,
+    red,
+    green,
+    blue,
   }: { red?: number; green?: number; blue?: number } = {}) {
     const values = { r: this.red, g: this.green, b: this.blue };
 
-    if (red) {
+    if (red !== undefined) {
       if (red < 0 || red > 255) {
         throw new RangeError(
           `Invalid red value: ${red}. Must be between 0 and 255 inclusive.`
@@ -328,7 +328,7 @@ export default abstract class Color {
       values.r = red;
     }
 
-    if (green) {
+    if (green !== undefined) {
       if (green < 0 || green > 255) {
         throw new RangeError(
           `Invalid green value: ${green}. Must be between 0 and 255 inclusive.`
@@ -338,7 +338,7 @@ export default abstract class Color {
       values.g = green;
     }
 
-    if (blue) {
+    if (blue !== undefined) {
       if (blue < 0 || blue > 255) {
         throw new RangeError(
           `Invalid blue value: ${blue}. Must be between 0 and 255 inclusive.`
@@ -353,9 +353,9 @@ export default abstract class Color {
 
   /** A helper function to get the changed HSL values. */
   private _changeHsl({
-    hue = 0,
-    saturation = 0,
-    lightness = 0,
+    hue,
+    saturation,
+    lightness,
   }: { hue?: number; saturation?: number; lightness?: number } = {}) {
     const values = {
       h: this.hue,
@@ -363,11 +363,11 @@ export default abstract class Color {
       l: this.lightness,
     };
 
-    if (hue) {
+    if (hue !== undefined) {
       values.h = hue % 360;
     }
 
-    if (saturation) {
+    if (saturation !== undefined) {
       if (saturation < 0 || saturation > 1) {
         throw new RangeError(
           `Invalid saturation value: ${saturation}. Must be between 0 and 1 inclusive.`
@@ -377,7 +377,7 @@ export default abstract class Color {
       values.s = saturation;
     }
 
-    if (lightness) {
+    if (lightness !== undefined) {
       if (lightness < 0 || lightness > 1) {
         throw new RangeError(
           `Invalid lightness value: ${lightness}. Must be between 0 and 1 inclusive.`
@@ -392,9 +392,9 @@ export default abstract class Color {
 
   /** A helper function to get the changed HWB values. */
   private _changeHwb({
-    hue = 0,
-    whiteness = 0,
-    blackness = 0,
+    hue,
+    whiteness,
+    blackness,
   }: { hue?: number; whiteness?: number; blackness?: number } = {}) {
     const values = {
       h: this.hue,
@@ -402,11 +402,11 @@ export default abstract class Color {
       b: this.blackness,
     };
 
-    if (hue) {
+    if (hue !== undefined) {
       values.h = hue % 360;
     }
 
-    if (whiteness) {
+    if (whiteness !== undefined) {
       if (whiteness < 0 || whiteness > 1) {
         throw new RangeError(
           `Invalid whiteness value: ${whiteness}. Must be between 0 and 1 inclusive.`
@@ -416,7 +416,7 @@ export default abstract class Color {
       values.w = whiteness;
     }
 
-    if (blackness) {
+    if (blackness !== undefined) {
       if (blackness < 0 || blackness > 1) {
         throw new RangeError(
           `Invalid blackness value: ${blackness}. Must be between 0 and 1 inclusive.`
@@ -432,8 +432,15 @@ export default abstract class Color {
   /**
    * The complement of this color in the same color space.
    */
-  get complement(): Color {
+  complement(): Color {
     return this.adjust({ hue: 180 });
+  }
+
+  /**
+   * The gray color with the same lightness as this color in the same color space.
+   */
+  grayscale(): Color {
+    return this.change({ saturation: 0 });
   }
 
   /**

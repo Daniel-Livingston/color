@@ -59,6 +59,9 @@ describe("change()", () => {
     expect(c.change({ red: 255, green: 100, blue: 10 }).array).toEqual([
       255, 100, 10,
     ]);
+    expect(
+      Color("#ffffff").change({ red: 0, green: 0, blue: 0 }).array
+    ).toEqual([0, 0, 0]);
   });
 
   it("should throw an error when invalid RGB values are used", () => {
@@ -93,23 +96,32 @@ describe("change()", () => {
 
 describe("get complement()", () => {
   it("should return the complement of the color", () => {
-    expect(Color({ r: 255, g: 0, b: 0 }).complement.array).toEqual([
+    expect(Color({ r: 255, g: 0, b: 0 }).complement().array).toEqual([
       0, 255, 255,
     ]);
-    expect(Color({ r: 0, g: 255, b: 0 }).complement.array).toEqual([
+    expect(Color({ r: 0, g: 255, b: 0 }).complement().array).toEqual([
       255, 0, 255,
     ]);
-    expect(Color({ r: 0, g: 0, b: 255 }).complement.array).toEqual([
+    expect(Color({ r: 0, g: 0, b: 255 }).complement().array).toEqual([
       255, 255, 0,
     ]);
-    expect(Color({ h: 0, s: 1, l: 0.5 }).complement.array).toEqual([
+    expect(Color({ h: 0, s: 1, l: 0.5 }).complement().array).toEqual([
       180, 1, 0.5,
     ]);
-    expect(Color({ h: 180, s: 1, l: 0.5 }).complement.array).toEqual([
+    expect(Color({ h: 180, s: 1, l: 0.5 }).complement().array).toEqual([
       0, 1, 0.5,
     ]);
-    expect(Color({ h: 60, s: 0.5, l: 1 }).complement.array).toEqual([
+    expect(Color({ h: 60, s: 0.5, l: 1 }).complement().array).toEqual([
       240, 0.5, 1,
     ]);
+  });
+});
+
+describe("get grayscale()", () => {
+  it("should return the grayscale version of the color", () => {
+    expect(Color({ h: 180, s: 1, l: 0.5 }).grayscale().array).toEqual([
+      0, 0, 0.5,
+    ]);
+    expect(Color({ h: 60, s: 0.5, l: 1 }).grayscale().array).toEqual([0, 0, 1]);
   });
 });
