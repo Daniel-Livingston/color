@@ -1,8 +1,8 @@
-import Color from "./color";
 import CMYK from "./cmyk";
 import HSL from "./hsl";
 import HSV from "./hsv";
 import RGB from "./rgb";
+import Color from "./color";
 
 /**
  * A color in the HWB color space.
@@ -11,6 +11,7 @@ export default class HWB extends Color {
   constructor(param: string | { h: number; w: number; b: number }) {
     super(param);
 
+    this._space = "hwb";
     if (typeof param === "string") {
       this._parse(param);
     } else {

@@ -1,3 +1,7 @@
+import HSL from "./hsl";
+import HWB from "./hwb";
+import RGB from "./rgb";
+
 type ColorParam =
   | string
   | { c: number; m: number; y: number; k: number }
@@ -6,10 +10,18 @@ type ColorParam =
   | { h: number; w: number; b: number }
   | { r: number; g: number; b: number };
 
+export type AdjustableColorValues =
+  | { red: number; green: number; blue: number }
+  | { hue: number; saturation: number; lightness: number }
+  | { hue: number; whiteness: number; blackness: number };
+
+type ColorSpace = "cmyk" | "hsl" | "hsv" | "hwb" | "rgb";
+
 /**
  * A color within a specific color space.
  */
 export default abstract class Color {
+  protected _space: ColorSpace = "rgb";
   protected _c: number | null = null;
   protected _m: number | null = null;
   protected _y: number | null = null;
@@ -114,6 +126,170 @@ export default abstract class Color {
    * Parse a color string.
    */
   protected abstract _parse(color: string): void;
+
+  /**
+   * Increase or decrease one or more properties of a color by fixed amounts.
+   *
+   * Must only specify changes in one color space at a time. (e.g., `adjust({red: 10, hue: 260})` is invalid.).
+   */
+  adjust(options: Partial<AdjustableColorValues>): Color {
+    if ("red" in options || "green" in options || "blue" in options) {
+      const newValues = this._adjustRgb(options);
+      return new RGB(newValues)[this._space]();
+    }
+
+    if ("whiteness" in options || "blackness" in options) {
+      const newValues = this._adjustHwb(options);
+      return new HWB(newValues)[this._space]();
+    }
+
+    if ("hue" in options || "saturation" in options || "lightness" in options) {
+      const newValues = this._adjustHsl(options);
+      return new HSL(newValues)[this._space]();
+    }
+
+    return this;
+  }
+
+  /** A helper function to get the adjusted RGB values. */
+  private _adjustRgb({
+    red = 0,
+    green = 0,
+    blue = 0,
+  }: { red?: number; green?: number; blue?: number } = {}) {
+    const values = { r: this.red, g: this.green, b: this.blue };
+
+    if (red) {
+      if (red < -255 || red > 255) {
+        throw new RangeError(
+          `Invalid red value: ${red}. Must be between -255 and 255 inclusive.`
+        );
+      }
+
+      values.r =
+        red > 0 ? Math.min(255, this.red + red) : Math.max(0, this.red + red);
+    }
+
+    if (green) {
+      if (green < -255 || green > 255) {
+        throw new RangeError(
+          `Invalid green value: ${green}. Must be between -255 and 255 inclusive.`
+        );
+      }
+
+      values.g =
+        green > 0
+          ? Math.min(255, this.green + green)
+          : Math.max(0, this.green + green);
+    }
+
+    if (blue) {
+      if (blue < -255 || blue > 255) {
+        throw new RangeError(
+          `Invalid blue value: ${blue}. Must be between -255 and 255 inclusive.`
+        );
+      }
+
+      values.b =
+        blue > 0
+          ? Math.min(255, this.blue + blue)
+          : Math.max(0, this.blue + blue);
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the adjusted HSL values. */
+  private _adjustHsl({
+    hue = 0,
+    saturation = 0,
+    lightness = 0,
+  }: { hue?: number; saturation?: number; lightness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      s: this.saturation,
+      l: this.lightness,
+    };
+
+    if (hue) {
+      values.h =
+        hue > 0 ? (this.hue + hue) % 360 : ((this.hue + hue) % 360) + 360;
+    }
+
+    if (saturation) {
+      if (saturation < -1 || saturation > 1) {
+        throw new RangeError(
+          `Invalid saturation value: ${saturation}. Must be between -1 and 1 inclusive.`
+        );
+      }
+
+      values.s =
+        saturation > 0
+          ? Math.min(1, this.saturation + saturation)
+          : Math.max(0, this.saturation + saturation);
+    }
+
+    if (lightness) {
+      if (lightness < -1 || lightness > 1) {
+        throw new RangeError(
+          `Invalid lightness value: ${lightness}. Must be between -1 and 1 inclusive.`
+        );
+      }
+
+      values.l =
+        lightness > 0
+          ? Math.min(1, this.lightness + lightness)
+          : Math.max(0, this.lightness + lightness);
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the adjusted HWB values. */
+  private _adjustHwb({
+    hue = 0,
+    whiteness = 0,
+    blackness = 0,
+  }: { hue?: number; whiteness?: number; blackness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      w: this.whiteness,
+      b: this.blackness,
+    };
+
+    if (hue) {
+      values.h =
+        hue > 0 ? (this.hue + hue) % 360 : ((this.hue + hue) % 360) + 360;
+    }
+
+    if (whiteness) {
+      if (whiteness < -1 || whiteness > 1) {
+        throw new RangeError(
+          `Invalid whiteness value: ${whiteness}. Must be between -1 and 1 inclusive.`
+        );
+      }
+
+      values.w =
+        whiteness > 0
+          ? Math.min(1, this.whiteness + whiteness)
+          : Math.max(0, this.whiteness + whiteness);
+    }
+
+    if (blackness) {
+      if (blackness < -1 || blackness > 1) {
+        throw new RangeError(
+          `Invalid blackness value: ${blackness}. Must be between -1 and 1 inclusive.`
+        );
+      }
+
+      values.b =
+        blackness > 0
+          ? Math.min(1, this.blackness + blackness)
+          : Math.max(0, this.blackness + blackness);
+    }
+
+    return values;
+  }
 
   /**
    * The cyan value for the color.

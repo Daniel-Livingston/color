@@ -63,7 +63,7 @@ describe("cmyk()", () => {
       expect(cmyk.cyan).toBe(color.cmyk[0]);
       expect(cmyk.magenta).toBe(color.cmyk[1]);
       expect(cmyk.yellow).toBe(color.cmyk[2]);
-      expect(cmyk.key).toBe(color.cmyk[3]);
+      expect(cmyk.blackness).toBe(color.cmyk[3]);
     });
   });
 });

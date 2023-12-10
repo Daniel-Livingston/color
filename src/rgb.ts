@@ -1,8 +1,8 @@
-import Color from "./color";
 import CMYK from "./cmyk";
 import HSL from "./hsl";
 import HSV from "./hsv";
 import HWB from "./hwb";
+import Color from "./color";
 
 /**
  * A color in the RGB color space.
@@ -11,6 +11,7 @@ export default class RGB extends Color {
   constructor(param: string | { r: number; g: number; b: number }) {
     super(param);
 
+    this._space = "rgb";
     if (typeof param === "string") {
       this._parse(param);
     } else {
