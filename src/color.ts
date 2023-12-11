@@ -430,17 +430,28 @@ export default abstract class Color {
   }
 
   /**
-   * The complement of this color in the same color space.
+   * Returns the complement of this color.
    */
   complement(): Color {
     return this.adjust({ hue: 180 });
   }
 
   /**
-   * The gray color with the same lightness as this color in the same color space.
+   * Returns the gray color with the same lightness as this color.
    */
   grayscale(): Color {
     return this.change({ saturation: 0 });
+  }
+
+  /**
+   * Returns the inverse of this color in the RGB color space.
+   */
+  inverse(): Color {
+    return this.change({
+      red: 255 - this.red,
+      green: 255 - this.green,
+      blue: 255 - this.blue,
+    });
   }
 
   /**
