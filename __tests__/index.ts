@@ -140,3 +140,11 @@ describe("inverse()", () => {
     expect(Color("#b37399").inverse().array).toEqual([76, 140, 102]);
   });
 });
+
+describe("mix()", () => {
+  it("should mix the color with the given color", () => {
+    expect(Color("#036").mix(Color("#d2e1dd")).hex).toBe("#698aa2");
+    expect(Color("#036").mix(Color("#d2e1dd"), 0.75).hex).toBe("#355f84");
+    expect(Color("#036").mix(Color("#d2e1dd"), 0.25).hex).toBe("#9eb6bf");
+  });
+});

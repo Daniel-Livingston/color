@@ -455,6 +455,32 @@ export default abstract class Color {
   }
 
   /**
+   * Returns a color that is a mixture of this color and the given color.
+   *
+   * The weight determines how much of each color to use. A larger weight means more of the given color is used.
+   *
+   * @param color The color to mix with.
+   * @param weight The weight of the color to mix with. Defaults to 0.5.
+   * @returns
+   */
+  mix(color: Color, weight: number = 0.5): Color {
+    const r0 = this.red;
+    const r1 = color.red;
+
+    const g0 = this.green;
+    const g1 = color.green;
+
+    const b0 = this.blue;
+    const b1 = color.blue;
+
+    const r = r0 * weight + r1 * (1 - weight);
+    const g = g0 * weight + g1 * (1 - weight);
+    const b = b0 * weight + b1 * (1 - weight);
+
+    return new RGB({ r, g, b })[this._space]();
+  }
+
+  /**
    * The cyan value for the color.
    *
    * @readonly
@@ -659,9 +685,9 @@ export default abstract class Color {
       return this._hex;
     }
 
-    const red = this.red;
-    const green = this.green;
-    const blue = this.blue;
+    const red = Math.round(this.red);
+    const green = Math.round(this.green);
+    const blue = Math.round(this.blue);
 
     return (this._hex = `#${red.toString(16).padStart(2, "0")}${green
       .toString(16)
