@@ -148,3 +148,35 @@ describe("mix()", () => {
     expect(Color("#036").mix(Color("#d2e1dd"), 0.25).hex).toBe("#9eb6bf");
   });
 });
+
+describe("scale()", () => {
+  it("should scale the color by the given amount (RGB)", () => {
+    expect(Color("#6b717f").scale({ red: 3, blue: 10, green: 5 }).hex).toBe(
+      "#ffffff"
+    );
+    expect(Color("#6b717f").scale({ red: -10, green: -5, blue: -1 }).hex).toBe(
+      "#000000"
+    );
+    expect(
+      Color("#6b717f").scale({ red: -0.15, green: 0.8, blue: -0.3 }).hex
+    ).toBe("#5be359");
+  });
+
+  it("should scale the color by the given amount (HSL)", () => {
+    expect(Color("#6b717f").scale({ lightness: 1 }).hex).toBe("#ffffff");
+    expect(Color("#6b717f").scale({ lightness: -1 }).hex).toBe("#000000");
+    expect(
+      Color("#6b717f").scale({ saturation: 0.8, lightness: -0.3 }).hex
+    ).toBe("#0f3795");
+  });
+
+  it("should scale the color by the given amount (HWB)", () => {
+    expect(Color("#6b717f").scale({ whiteness: 1 }).hex).toBe("#aaaaaa");
+    expect(Color("#6b717f").scale({ whiteness: -1 }).hex).toBe("#002680");
+    expect(Color("#6b717f").scale({ blackness: 1 }).hex).toBe("#4b4b4b");
+    expect(Color("#6b717f").scale({ blackness: -1 }).hex).toBe("#6b97ff");
+    expect(
+      Color("#6b717f").scale({ whiteness: 0.8, blackness: -0.3 }).hex
+    ).toBe("#b7b7b7");
+  });
+});

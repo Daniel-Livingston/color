@@ -15,6 +15,11 @@ export type AdjustableColorValues =
   | { hue: number; saturation: number; lightness: number }
   | { hue: number; whiteness: number; blackness: number };
 
+export type ScalableColorValues =
+  | { red: number; green: number; blue: number }
+  | { saturation: number; lightness: number }
+  | { whiteness: number; blackness: number };
+
 type ColorSpace = "cmyk" | "hsl" | "hsv" | "hwb" | "rgb";
 
 /**
@@ -481,20 +486,131 @@ export default abstract class Color {
   }
 
   /**
+   *
+   * @param weight
+   * @returns
+   */
+  scale(options: Partial<ScalableColorValues>): Color {
+    if ("red" in options || "green" in options || "blue" in options) {
+      const newValues = this._scaleRgb(options);
+      return new RGB(newValues)[this._space]();
+    }
+
+    if ("whiteness" in options || "blackness" in options) {
+      const newValues = this._scaleHwb(options);
+      return new HWB(newValues)[this._space]();
+    }
+
+    if ("saturation" in options || "lightness" in options) {
+      const newValues = this._scaleHsl(options);
+      return new HSL(newValues)[this._space]();
+    }
+
+    return this;
+  }
+
+  /** A helper function to get the scaled RGB values. */
+  private _scaleRgb({
+    red = 0,
+    green = 0,
+    blue = 0,
+  }: { red?: number; green?: number; blue?: number } = {}) {
+    const values = { r: this.red, g: this.green, b: this.blue };
+
+    if (red) {
+      values.r =
+        red > 0
+          ? Math.min((255 - this.red) * red + this.red, 255)
+          : Math.max(this.red - this.red * Math.abs(red), 0);
+    }
+
+    if (green) {
+      values.g =
+        green > 0
+          ? Math.min((255 - this.green) * green + this.green, 255)
+          : Math.max(this.green - this.green * Math.abs(green), 0);
+    }
+
+    if (blue) {
+      values.b =
+        blue > 0
+          ? Math.min((255 - this.blue) * blue + this.blue, 255)
+          : Math.max(this.blue - this.blue * Math.abs(blue), 0);
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the scaled HSL values. */
+  private _scaleHsl({
+    saturation = 0,
+    lightness = 0,
+  }: { saturation?: number; lightness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      s: this.saturation,
+      l: this.lightness,
+    };
+
+    if (saturation) {
+      values.s =
+        saturation > 0
+          ? Math.min((1 - this.saturation) * saturation + this.saturation, 1)
+          : Math.max(
+              this.saturation - this.saturation * Math.abs(saturation),
+              0
+            );
+    }
+
+    if (lightness) {
+      values.l =
+        lightness > 0
+          ? Math.min((1 - this.lightness) * lightness + this.lightness, 1)
+          : Math.max(this.lightness - this.lightness * Math.abs(lightness), 0);
+    }
+
+    return values;
+  }
+
+  /** A helper function to get the scaled HWB values. */
+  private _scaleHwb({
+    whiteness = 0,
+    blackness = 0,
+  }: { whiteness?: number; blackness?: number } = {}) {
+    const values = {
+      h: this.hue,
+      w: this.whiteness,
+      b: this.blackness,
+    };
+
+    if (whiteness) {
+      values.w =
+        whiteness > 0
+          ? Math.min((1 - this.whiteness) * whiteness + this.whiteness, 1)
+          : Math.max(this.whiteness - this.whiteness * Math.abs(whiteness), 0);
+    }
+
+    if (blackness) {
+      values.b =
+        blackness > 0
+          ? Math.min((1 - this.blackness) * blackness + this.blackness, 1)
+          : Math.max(this.blackness - this.blackness * Math.abs(blackness), 0);
+    }
+
+    return values;
+  }
+
+  /**
    * The cyan value for the color.
    *
    * @readonly
    */
   get cyan(): number {
-    if (this._c !== null) {
-      return this._c;
+    if (this._c === null) {
+      [this._c, this._m, this._y, this._k] = this._cmyk();
     }
 
-    const [c, m, y, k] = this._cmyk();
-    this._m = m;
-    this._y = y;
-    this._k = k;
-    return (this._c = c);
+    return Math.round(this._c * 100) / 100;
   }
 
   /**
@@ -503,15 +619,11 @@ export default abstract class Color {
    * @readonly
    */
   get magenta(): number {
-    if (this._m !== null) {
-      return this._m;
+    if (this._m === null) {
+      [this._c, this._m, this._y, this._k] = this._cmyk();
     }
 
-    const [c, m, y, k] = this._cmyk();
-    this._c = c;
-    this._y = y;
-    this._k = k;
-    return (this._m = m);
+    return Math.round(this._m * 100) / 100;
   }
 
   /**
@@ -520,15 +632,11 @@ export default abstract class Color {
    * @readonly
    */
   get yellow(): number {
-    if (this._y !== null) {
-      return this._y;
+    if (this._y === null) {
+      [this._c, this._m, this._y, this._k] = this._cmyk();
     }
 
-    const [c, m, y, k] = this._cmyk();
-    this._c = c;
-    this._m = m;
-    this._k = k;
-    return (this._y = y);
+    return Math.round(this._y * 100) / 100;
   }
 
   /**
@@ -537,14 +645,11 @@ export default abstract class Color {
    * @readonly
    */
   get hue(): number {
-    if (this._h !== null) {
-      return this._h;
+    if (this._h === null) {
+      [this._h, this._s, this._l] = this._hsl();
     }
 
-    const [h, s, l] = this._hsl();
-    this._s = s;
-    this._l = l;
-    return (this._h = h);
+    return Math.round(this._h);
   }
 
   /**
@@ -553,14 +658,11 @@ export default abstract class Color {
    * @readonly
    */
   get saturation(): number {
-    if (this._s !== null) {
-      return this._s;
+    if (this._s === null) {
+      [this._h, this._s, this._l] = this._hsl();
     }
 
-    const [h, s, l] = this._hsl();
-    this._h = h;
-    this._l = l;
-    return (this._s = s);
+    return Math.round(this._s * 100) / 100;
   }
 
   /**
@@ -569,14 +671,11 @@ export default abstract class Color {
    * @readonly
    */
   get lightness(): number {
-    if (this._l !== null) {
-      return this._l;
+    if (this._l === null) {
+      [this._h, this._s, this._l] = this._hsl();
     }
 
-    const [h, s, l] = this._hsl();
-    this._h = h;
-    this._s = s;
-    return (this._l = l);
+    return Math.round(this._l * 100) / 100;
   }
 
   /**
@@ -585,14 +684,11 @@ export default abstract class Color {
    * @readonly
    */
   get brightness(): number {
-    if (this._v !== null) {
-      return this._v;
+    if (this._v === null) {
+      [this._h, this._s, this._v] = this._hsv();
     }
 
-    const [h, s, v] = this._hsv();
-    this._h = h;
-    this._s = s;
-    return (this._v = v);
+    return Math.round(this._v * 100) / 100;
   }
 
   /**
@@ -601,14 +697,11 @@ export default abstract class Color {
    * @readonly
    */
   get whiteness(): number {
-    if (this._w !== null) {
-      return this._w;
+    if (this._w === null) {
+      [this._h, this._w, this._k] = this._hwb();
     }
 
-    const [h, w, b] = this._hwb();
-    this._h = h;
-    this._k = b;
-    return (this._w = w);
+    return Math.round(this._w * 100) / 100;
   }
 
   /**
@@ -617,14 +710,11 @@ export default abstract class Color {
    * @readonly
    */
   get blackness(): number {
-    if (this._k !== null) {
-      return this._k;
+    if (this._k === null) {
+      [this._h, this._w, this._k] = this._hwb();
     }
 
-    const [h, w, b] = this._hwb();
-    this._h = h;
-    this._w = w;
-    return (this._k = b);
+    return Math.round(this._k * 100) / 100;
   }
 
   /**
@@ -633,14 +723,11 @@ export default abstract class Color {
    * @readonly
    */
   get red(): number {
-    if (this._r !== null) {
-      return this._r;
+    if (this._r === null) {
+      [this._r, this._g, this._b] = this._rgb();
     }
 
-    const [r, g, b] = this._rgb();
-    this._g = g;
-    this._b = b;
-    return (this._r = r);
+    return Math.round(this._r);
   }
 
   /**
@@ -649,14 +736,11 @@ export default abstract class Color {
    * @readonly
    */
   get green(): number {
-    if (this._g !== null) {
-      return this._g;
+    if (this._g === null) {
+      [this._r, this._g, this._b] = this._rgb();
     }
 
-    const [r, g, b] = this._rgb();
-    this._r = r;
-    this._b = b;
-    return (this._g = g);
+    return Math.round(this._g);
   }
 
   /**
@@ -665,14 +749,11 @@ export default abstract class Color {
    * @readonly
    */
   get blue(): number {
-    if (this._b !== null) {
-      return this._b;
+    if (this._b === null) {
+      [this._r, this._g, this._b] = this._rgb();
     }
 
-    const [r, g, b] = this._rgb();
-    this._r = r;
-    this._g = g;
-    return (this._b = b);
+    return Math.round(this._b);
   }
 
   /**
@@ -681,17 +762,13 @@ export default abstract class Color {
    * @readonly
    */
   get hex(): string {
-    if (this._hex !== null) {
-      return this._hex;
+    if (this._hex === null) {
+      this._hex = `#${this.red.toString(16).padStart(2, "0")}${this.green
+        .toString(16)
+        .padStart(2, "0")}${this.blue.toString(16).padStart(2, "0")}`;
     }
 
-    const red = Math.round(this.red);
-    const green = Math.round(this.green);
-    const blue = Math.round(this.blue);
-
-    return (this._hex = `#${red.toString(16).padStart(2, "0")}${green
-      .toString(16)
-      .padStart(2, "0")}${blue.toString(16).padStart(2, "0")}`);
+    return this._hex;
   }
 
   /** A helper function to convert HSV values to RGB values. */
@@ -747,7 +824,7 @@ export default abstract class Color {
         );
     }
 
-    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    return [r * 255, g * 255, b * 255];
   }
 
   /** A helper function to convert RGB values to CMYK values. */
@@ -770,12 +847,7 @@ export default abstract class Color {
     const m = (1 - g - k) / (1 - k);
     const y = (1 - b - k) / (1 - k);
 
-    return [
-      Math.round(c * 100) / 100,
-      Math.round(m * 100) / 100,
-      Math.round(y * 100) / 100,
-      Math.round(k * 100) / 100,
-    ];
+    return [c, m, y, k];
   }
 
   /** A helper function to convert RGB values to HSL values. */
@@ -794,7 +866,7 @@ export default abstract class Color {
     const l = (max + min) / 2;
 
     if (max === min) {
-      return [0, 0, Math.round(l * 100) / 100];
+      return [0, 0, l];
     }
 
     const s =
@@ -809,12 +881,12 @@ export default abstract class Color {
       h = 4 + (r - g) / (max - min);
     }
 
-    h = Math.round(h * 60);
+    h = h * 60;
     if (h < 0) {
       h += 360;
     }
 
-    return [h, Math.round(s * 100) / 100, Math.round(l * 100) / 100];
+    return [h, s, l];
   }
 
   /** A helper function to convert RGB values to HSV values. */
@@ -827,7 +899,7 @@ export default abstract class Color {
     const v = l + s * Math.min(l, 1 - l);
     const s2 = v === 0 ? 0 : 2 - (2 * l) / v;
 
-    return [h, Math.round(s2 * 100) / 100, Math.round(v * 100) / 100];
+    return [h, s2, v];
   }
 
   /** A helper function to convert RGB values to HWB values. */
@@ -845,6 +917,6 @@ export default abstract class Color {
     const w = Math.min(r, g, b);
     const b2 = 1 - Math.max(r, g, b);
 
-    return [h, Math.round(w * 100) / 100, Math.round(b2 * 100) / 100];
+    return [h, w, b2];
   }
 }

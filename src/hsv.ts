@@ -80,7 +80,7 @@ export default class HSV extends Color {
     const l = v - (v * s) / 2;
     const s2 = l === 0 || l === 1 ? 0 : (v - l) / Math.min(l, 1 - l);
 
-    return [h, Math.round(s2 * 100) / 100, Math.round(l * 100) / 100];
+    return [h, s2, l];
   }
 
   protected _hsv(): [number, number, number] {

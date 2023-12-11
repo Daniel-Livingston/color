@@ -76,16 +76,13 @@ export default class CMYK extends Color {
   }
 
   protected _rgb(): [number, number, number] {
-    const c = this._c!;
-    const m = this._m!;
-    const y = this._y!;
-    const k = this._k!;
+    const [c, m, y, k] = [this._c!, this._m!, this._y!, this._k!];
 
     const r = 255 * (1 - c) * (1 - k);
     const g = 255 * (1 - m) * (1 - k);
     const b = 255 * (1 - y) * (1 - k);
 
-    return [Math.round(r), Math.round(g), Math.round(b)];
+    return [r, g, b];
   }
 
   protected _parse(color: string): void {

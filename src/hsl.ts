@@ -84,7 +84,7 @@ export default class HSL extends Color {
     const v = l + s * Math.min(l, 1 - l);
     const s2 = v === 0 ? 0 : 2 - (2 * l) / v;
 
-    return [h, Math.round(s2 * 100) / 100, Math.round(v * 100) / 100];
+    return [h, s2, v];
   }
 
   protected _hwb(): [number, number, number] {
@@ -131,11 +131,7 @@ export default class HSL extends Color {
       b = x;
     }
 
-    return [
-      Math.round((r + m) * 255),
-      Math.round((g + m) * 255),
-      Math.round((b + m) * 255),
-    ];
+    return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
   }
 
   protected _parse(color: string): void {

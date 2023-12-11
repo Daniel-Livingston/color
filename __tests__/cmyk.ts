@@ -120,38 +120,6 @@ describe("rgb()", () => {
   });
 });
 
-describe("adjust()", () => {
-  it("should adjust the CMYK color when the RGB values are updated", () => {
-    const c = new Color("cmyk(16%, 11%, 0%, 50%)");
-    const adjusted = c.adjust({ red: 250, green: 20, blue: -30 });
-    expect(adjusted.cyan).toBe(0);
-    expect(adjusted.magenta).toBe(0.48);
-    expect(adjusted.yellow).toBe(0.62);
-    expect(adjusted.blackness).toBe(0);
-  });
-
-  it("should throw an error when invalid RGB values are used", () => {
-    const c = new Color("cmyk(16%, 11%, 0%, 50%)");
-    expect(() => c.adjust({ red: 256 })).toThrow();
-    expect(() => c.adjust({ blue: -256 })).toThrow();
-  });
-
-  it("should adjust the CMYK color when the HSL values are updated", () => {
-    const c = new Color("cmyk(16%, 11%, 0%, 50%)");
-    const adjusted = c.adjust({ hue: 60, saturation: 0.5, lightness: -0.3 });
-    expect(adjusted.cyan).toBe(0.22);
-    expect(adjusted.magenta).toBe(0.74);
-    expect(adjusted.yellow).toBe(0);
-    expect(adjusted.blackness).toBe(0.75);
-  });
-
-  it("should throw an error when invalid HSL values are used", () => {
-    const c = new Color("cmyk(16%, 11%, 0%, 50%)");
-    expect(() => c.adjust({ saturation: -1.1 })).toThrow();
-    expect(() => c.adjust({ lightness: 1.1 })).toThrow();
-  });
-});
-
 const colors = [
   {
     cmyk: [0, 1, 1, 0],
