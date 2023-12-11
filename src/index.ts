@@ -24,15 +24,7 @@ export default function (color: ColorParam): Color {
       return new HWB(color);
     }
 
-    if (color.startsWith("rgb")) {
-      return new RGB(color);
-    }
-
-    if (color.startsWith("#")) {
-      return new RGB(color);
-    }
-
-    throw new Error(`Invalid color string: ${color}`);
+    return new RGB(color);
   }
 
   if ("cyan" in color) {

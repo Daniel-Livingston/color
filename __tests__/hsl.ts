@@ -22,6 +22,12 @@ describe("constructor()", () => {
       expect(c.lightness).toBe(color.hsl[2]);
     });
   });
+
+  it("should throw an error for an invalid HSL string", () => {
+    expect(() => {
+      new Color("hsl(0, 100%, 50)");
+    }).toThrow();
+  });
 });
 
 describe("get array()", () => {

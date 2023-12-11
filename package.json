@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "npx tsc",
+    "coverage": "jest --coverage",
     "test": "jest"
   },
   "repository": {

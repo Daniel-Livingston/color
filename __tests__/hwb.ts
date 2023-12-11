@@ -22,6 +22,12 @@ describe("constructor()", () => {
       expect(c.blackness).toBe(color.hwb[2]);
     });
   });
+
+  it("should throw an error for an invalid HWB string", () => {
+    expect(() => {
+      new Color("hwb(0, 100%, 50)");
+    }).toThrow();
+  });
 });
 
 describe("get array()", () => {

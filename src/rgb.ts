@@ -65,7 +65,8 @@ export default class RGB extends Color {
   }
 
   rgb(): Color {
-    return this;
+    const [red, green, blue] = this._rgb();
+    return new RGB({ red, green, blue });
   }
 
   get string(): string {

@@ -52,7 +52,8 @@ export default class HWB extends Color {
   }
 
   hwb(): Color {
-    return this;
+    const [hue, whiteness, blackness] = this._hwb();
+    return new HWB({ hue, whiteness, blackness });
   }
 
   get object(): { [key: string]: number } {
@@ -115,7 +116,7 @@ export default class HWB extends Color {
   }
 
   protected _parse(color: string): void {
-    const match = color.match(/^hwb\((\d+),\s*(\d+)%?,\s*(\d+)%?\)$/);
+    const match = color.match(/^hwb\((\d+),\s*(\d+)%,\s*(\d+)%\)$/);
 
     if (match) {
       this._h = parseInt(match[1], 10);

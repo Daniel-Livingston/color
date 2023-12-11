@@ -1,5 +1,61 @@
 import Color from "../src/index";
 
+describe("Color()", () => {
+  it("should parse a string in the CMYK color space", () => {
+    expect(Color("cmyk(0%, 100%, 50%, 0%)").array).toEqual([0, 1, 0.5, 0]);
+  });
+
+  it("should parse an object in the CMYK color space", () => {
+    expect(Color({ cyan: 0, magenta: 1, yellow: 0.5, key: 0 }).array).toEqual([
+      0, 1, 0.5, 0,
+    ]);
+  });
+
+  it("should parse a string in the HSL color space", () => {
+    expect(Color("hsl(0, 100%, 50%)").array).toEqual([0, 1, 0.5]);
+  });
+
+  it("should parse an object in the HSL color space", () => {
+    expect(Color({ hue: 0, saturation: 1, lightness: 0.5 }).array).toEqual([
+      0, 1, 0.5,
+    ]);
+  });
+
+  it("should parse a string in the HSV color space", () => {
+    expect(Color("hsv(0, 100%, 50%)").array).toEqual([0, 1, 0.5]);
+  });
+
+  it("should parse an object in the HSV color space", () => {
+    expect(Color({ hue: 0, saturation: 1, value: 1 }).array).toEqual([0, 1, 1]);
+  });
+
+  it("should parse a string in the HWB color space", () => {
+    expect(Color("hwb(0, 100%, 50%)").array).toEqual([0, 1, 0.5]);
+  });
+
+  it("should parse an object in the HWB color space", () => {
+    expect(Color({ hue: 0, whiteness: 0, blackness: 0.5 }).array).toEqual([
+      0, 0, 0.5,
+    ]);
+  });
+
+  it("should parse a string in the RGB color space", () => {
+    expect(Color("rgb(255, 0, 0)").array).toEqual([255, 0, 0]);
+  });
+
+  it("should parse an object in the RGB color space", () => {
+    expect(Color({ red: 255, green: 0, blue: 0 }).array).toEqual([255, 0, 0]);
+  });
+
+  it("should parse a Hex string", () => {
+    expect(Color("#ff0000").array).toEqual([255, 0, 0]);
+  });
+
+  it("should parse a color keyword", () => {
+    expect(Color("red").array).toEqual([255, 0, 0]);
+  });
+});
+
 describe("adjust()", () => {
   it("should adjust the color by the given amount (RGB)", () => {
     const c = Color({ red: 255, green: 0, blue: 0 });

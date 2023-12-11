@@ -51,7 +51,8 @@ export default class HSV extends Color {
   }
 
   hsv(): Color {
-    return this;
+    const [hue, saturation, value] = this._hsv();
+    return new HSV({ hue, saturation, value });
   }
 
   hwb(): Color {
@@ -106,7 +107,7 @@ export default class HSV extends Color {
   }
 
   protected _parse(color: string) {
-    const match = color.match(/^hsv\((\d+),\s*(\d+)%?,\s*(\d+)%?\)$/);
+    const match = color.match(/^hsv\((\d+),\s*(\d+)%,\s*(\d+)%\)$/);
 
     if (match) {
       this._h = parseInt(match[1], 10);

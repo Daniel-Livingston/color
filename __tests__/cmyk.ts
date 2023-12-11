@@ -25,6 +25,12 @@ describe("constructor()", () => {
       expect(c.blackness).toBe(color.cmyk[3]);
     });
   });
+
+  it("should throw an error for an invalid CMYK string", () => {
+    expect(() => {
+      new Color("cmyk(0, 100%, 50, 100%)");
+    }).toThrow();
+  });
 });
 
 describe("get array()", () => {

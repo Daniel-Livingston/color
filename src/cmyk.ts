@@ -28,7 +28,8 @@ export default class CMYK extends Color {
   }
 
   cmyk(): Color {
-    return this;
+    const [cyan, magenta, yellow, key] = this._cmyk();
+    return new CMYK({ cyan, magenta, yellow, key });
   }
 
   hsl(): Color {
@@ -94,9 +95,7 @@ export default class CMYK extends Color {
   }
 
   protected _parse(color: string): void {
-    const match = color.match(
-      /^cmyk\((\d+)%?,\s*(\d+)%?,\s*(\d+)%?,\s*(\d+)%?\)$/
-    );
+    const match = color.match(/^cmyk\((\d+)%,\s*(\d+)%,\s*(\d+)%,\s*(\d+)%\)$/);
 
     if (match) {
       this._c = parseInt(match[1], 10) / 100;
