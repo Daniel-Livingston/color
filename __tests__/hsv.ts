@@ -13,9 +13,9 @@ describe("constructor()", () => {
   it("should parse an HSV object", () => {
     colors.forEach((color) => {
       const c = new Color({
-        h: color.hsv[0],
-        s: color.hsv[1],
-        v: color.hsv[2],
+        hue: color.hsv[0],
+        saturation: color.hsv[1],
+        value: color.hsv[2],
       });
       expect(c.hue).toBe(color.hsv[0]);
       expect(c.saturation).toBe(color.hsv[1]);
@@ -38,9 +38,9 @@ describe("get object()", () => {
     colors.forEach((color) => {
       const c = new Color(color.string);
       expect(c.object).toEqual({
-        h: color.hsv[0],
-        s: color.hsv[1],
-        v: color.hsv[2],
+        hue: color.hsv[0],
+        saturation: color.hsv[1],
+        value: color.hsv[2],
       });
     });
   });

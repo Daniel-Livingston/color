@@ -3,37 +3,42 @@ import HSV from "./hsv";
 import HWB from "./hwb";
 import RGB from "./rgb";
 import Color from "./color";
+import type { HSLObject } from "./types";
 
 /**
  * A color in the HSL color space.
  */
 export default class HSL extends Color {
-  constructor(param: string | { h: number; s: number; l: number }) {
+  constructor(param: string | HSLObject) {
     super(param);
 
     this._space = "hsl";
     if (typeof param === "string") {
       this._parse(param);
     } else {
-      if (param.s === 0) {
+      if (param.saturation === 0) {
         this._h = 0;
         this._s = 0;
-        this._l = param.l;
+        this._l = param.lightness;
         return;
       }
 
-      this._h = param.h >= 0 ? param.h % 360 : (param.h % 360) + 360;
-      this._s = param.s;
-      this._l = param.l;
+      this._h = param.hue >= 0 ? param.hue % 360 : (param.hue % 360) + 360;
+      this._s = param.saturation;
+      this._l = param.lightness;
     }
+  }
+
+  get array(): number[] {
+    return [this.hue, this.saturation, this.lightness];
   }
 
   cmyk(): Color {
     return new CMYK({
-      c: this.cyan,
-      m: this.magenta,
-      y: this.yellow,
-      k: this.blackness,
+      cyan: this.cyan,
+      magenta: this.magenta,
+      yellow: this.yellow,
+      key: this.blackness,
     });
   }
 
@@ -42,23 +47,31 @@ export default class HSL extends Color {
   }
 
   hsv(): Color {
-    return new HSV({ h: this.hue, s: this.saturation, v: this.brightness });
+    return new HSV({
+      hue: this.hue,
+      saturation: this.saturation,
+      value: this.brightness,
+    });
   }
 
   hwb(): Color {
-    return new HWB({ h: this.hue, w: this.whiteness, b: this.blackness });
-  }
-
-  rgb(): Color {
-    return new RGB({ r: this.red, g: this.green, b: this.blue });
-  }
-
-  get array(): number[] {
-    return [this.hue, this.saturation, this.lightness];
+    return new HWB({
+      hue: this.hue,
+      whiteness: this.whiteness,
+      blackness: this.blackness,
+    });
   }
 
   get object(): { [key: string]: number } {
-    return { h: this.hue, s: this.saturation, l: this.lightness };
+    return {
+      hue: this.hue,
+      saturation: this.saturation,
+      lightness: this.lightness,
+    };
+  }
+
+  rgb(): Color {
+    return new RGB({ red: this.red, green: this.green, blue: this.blue });
   }
 
   get string(): string {
@@ -69,7 +82,7 @@ export default class HSL extends Color {
 
   protected _cmyk(): [number, number, number, number] {
     const [r, g, b] = this._rgb();
-    return HSL.rgbToCmyk(r, g, b);
+    return HSL._rgbToCmyk(r, g, b);
   }
 
   protected _hsl(): [number, number, number] {
@@ -89,7 +102,20 @@ export default class HSL extends Color {
 
   protected _hwb(): [number, number, number] {
     const [r, g, b] = this._rgb();
-    return HSL.rgbToHwb(r, g, b);
+    return HSL._rgbToHwb(r, g, b);
+  }
+
+  protected _parse(color: string): void {
+    const match = color.match(/^hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)$/);
+
+    if (match) {
+      this._h = parseInt(match[1], 10);
+      this._s = parseInt(match[2], 10) / 100;
+      this._l = parseInt(match[3], 10) / 100;
+      return;
+    }
+
+    throw new Error("Invalid color");
   }
 
   protected _rgb(): [number, number, number] {
@@ -132,18 +158,5 @@ export default class HSL extends Color {
     }
 
     return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
-  }
-
-  protected _parse(color: string): void {
-    const match = color.match(/^hsl\((\d+),\s*(\d+)%?,\s*(\d+)%?\)$/);
-
-    if (match) {
-      this._h = parseInt(match[1], 10);
-      this._s = parseInt(match[2], 10) / 100;
-      this._l = parseInt(match[3], 10) / 100;
-      return;
-    }
-
-    throw new Error("Invalid color");
   }
 }

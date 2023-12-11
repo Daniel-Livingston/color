@@ -14,10 +14,10 @@ describe("constructor()", () => {
   it("should parse a CMYK object", () => {
     colors.forEach((color) => {
       const c = new Color({
-        c: color.cmyk[0],
-        m: color.cmyk[1],
-        y: color.cmyk[2],
-        k: color.cmyk[3],
+        cyan: color.cmyk[0],
+        magenta: color.cmyk[1],
+        yellow: color.cmyk[2],
+        key: color.cmyk[3],
       });
       expect(c.cyan).toBe(color.cmyk[0]);
       expect(c.magenta).toBe(color.cmyk[1]);
@@ -41,10 +41,10 @@ describe("get object()", () => {
     colors.forEach((color) => {
       const c = new Color(color.string);
       expect(c.object).toEqual({
-        c: color.cmyk[0],
-        m: color.cmyk[1],
-        y: color.cmyk[2],
-        k: color.cmyk[3],
+        cyan: color.cmyk[0],
+        magenta: color.cmyk[1],
+        yellow: color.cmyk[2],
+        key: color.cmyk[3],
       });
     });
   });

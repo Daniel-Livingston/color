@@ -13,9 +13,9 @@ describe("constructor()", () => {
   it("should parse an HSL object", () => {
     colors.forEach((color) => {
       const c = new Color({
-        h: color.hsl[0],
-        s: color.hsl[1],
-        l: color.hsl[2],
+        hue: color.hsl[0],
+        saturation: color.hsl[1],
+        lightness: color.hsl[2],
       });
       expect(c.hue).toBe(color.hsl[0]);
       expect(c.saturation).toBe(color.hsl[1]);
@@ -38,9 +38,9 @@ describe("get object()", () => {
     colors.forEach((color) => {
       const c = new Color(color.string);
       expect(c.object).toEqual({
-        h: color.hsl[0],
-        s: color.hsl[1],
-        l: color.hsl[2],
+        hue: color.hsl[0],
+        saturation: color.hsl[1],
+        lightness: color.hsl[2],
       });
     });
   });

@@ -4,16 +4,9 @@ import HSL from "./hsl";
 import HSV from "./hsv";
 import HWB from "./hwb";
 import RGB from "./rgb";
+import type { ColorParam } from "./types";
 
-export default function (
-  color:
-    | string
-    | { c: number; m: number; y: number; k: number }
-    | { h: number; s: number; l: number }
-    | { h: number; s: number; v: number }
-    | { h: number; w: number; b: number }
-    | { r: number; g: number; b: number }
-): Color {
+export default function (color: ColorParam): Color {
   if (typeof color === "string") {
     if (color.startsWith("cmyk")) {
       return new CMYK(color);
@@ -42,19 +35,19 @@ export default function (
     throw new Error(`Invalid color string: ${color}`);
   }
 
-  if ("c" in color) {
+  if ("cyan" in color) {
     return new CMYK(color);
   }
 
-  if ("l" in color) {
+  if ("lightness" in color) {
     return new HSL(color);
   }
 
-  if ("v" in color) {
+  if ("value" in color) {
     return new HSV(color);
   }
 
-  if ("w" in color) {
+  if ("whiteness" in color) {
     return new HWB(color);
   }
 

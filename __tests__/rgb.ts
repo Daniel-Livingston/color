@@ -22,9 +22,9 @@ describe("constructor()", () => {
   it("should parse an RGB object", () => {
     colors.forEach((color) => {
       const c = new Color({
-        r: color.rgb[0],
-        g: color.rgb[1],
-        b: color.rgb[2],
+        red: color.rgb[0],
+        green: color.rgb[1],
+        blue: color.rgb[2],
       });
       expect(c.red).toBe(color.rgb[0]);
       expect(c.green).toBe(color.rgb[1]);
@@ -47,9 +47,9 @@ describe("get object()", () => {
     colors.forEach((color) => {
       const c = new Color(color.hex);
       expect(c.object).toEqual({
-        r: color.rgb[0],
-        g: color.rgb[1],
-        b: color.rgb[2],
+        red: color.rgb[0],
+        green: color.rgb[1],
+        blue: color.rgb[2],
       });
     });
   });

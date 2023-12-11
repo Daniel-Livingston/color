@@ -13,9 +13,9 @@ describe("constructor()", () => {
   it("should parse an HWB object", () => {
     colors.forEach((color) => {
       const c = new Color({
-        h: color.hwb[0],
-        w: color.hwb[1],
-        b: color.hwb[2],
+        hue: color.hwb[0],
+        whiteness: color.hwb[1],
+        blackness: color.hwb[2],
       });
       expect(c.hue).toBe(color.hwb[0]);
       expect(c.whiteness).toBe(color.hwb[1]);
@@ -38,9 +38,9 @@ describe("get object()", () => {
     colors.forEach((color) => {
       const c = new Color(color.string);
       expect(c.object).toEqual({
-        h: color.hwb[0],
-        w: color.hwb[1],
-        b: color.hwb[2],
+        hue: color.hwb[0],
+        whiteness: color.hwb[1],
+        blackness: color.hwb[2],
       });
     });
   });

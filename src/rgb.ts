@@ -3,59 +3,88 @@ import HSL from "./hsl";
 import HSV from "./hsv";
 import HWB from "./hwb";
 import Color from "./color";
+import type { RGBObject } from "./types";
 
 /**
  * A color in the RGB color space.
  */
 export default class RGB extends Color {
-  constructor(param: string | { r: number; g: number; b: number }) {
+  constructor(param: string | RGBObject) {
     super(param);
 
     this._space = "rgb";
     if (typeof param === "string") {
       this._parse(param);
     } else {
-      this._r = param.r;
-      this._g = param.g;
-      this._b = param.b;
+      this._r = param.red;
+      this._g = param.green;
+      this._b = param.blue;
     }
-  }
-
-  cmyk(): Color {
-    return new CMYK({
-      c: this.cyan,
-      m: this.magenta,
-      y: this.yellow,
-      k: this.blackness,
-    });
-  }
-
-  hsl(): Color {
-    return new HSL({ h: this.hue, s: this.saturation, l: this.lightness });
-  }
-
-  hsv(): Color {
-    return new HSV({ h: this.hue, s: this.saturation, v: this.brightness });
-  }
-
-  hwb(): Color {
-    return new HWB({ h: this.hue, w: this.whiteness, b: this.blackness });
-  }
-
-  rgb(): Color {
-    return this;
   }
 
   get array(): number[] {
     return [this.red, this.green, this.blue];
   }
 
+  cmyk(): Color {
+    return new CMYK({
+      cyan: this.cyan,
+      magenta: this.magenta,
+      yellow: this.yellow,
+      key: this.blackness,
+    });
+  }
+
+  hsl(): Color {
+    return new HSL({
+      hue: this.hue,
+      saturation: this.saturation,
+      lightness: this.lightness,
+    });
+  }
+
+  hsv(): Color {
+    return new HSV({
+      hue: this.hue,
+      saturation: this.saturation,
+      value: this.brightness,
+    });
+  }
+
+  hwb(): Color {
+    return new HWB({
+      hue: this.hue,
+      whiteness: this.whiteness,
+      blackness: this.blackness,
+    });
+  }
+
   get object(): { [key: string]: number } {
-    return { r: this.red, g: this.green, b: this.blue };
+    return { red: this.red, green: this.green, blue: this.blue };
+  }
+
+  rgb(): Color {
+    return this;
   }
 
   get string(): string {
     return `rgb(${this.red}, ${this.green}, ${this.blue})`;
+  }
+
+  protected _cmyk(): [number, number, number, number] {
+    return RGB._rgbToCmyk(this._r!, this._g!, this._b!);
+  }
+
+  protected _hsl(): [number, number, number] {
+    return RGB._rgbToHsl(this._r!, this._g!, this._b!);
+  }
+
+  protected _hsv(): [number, number, number] {
+    return RGB._rgbToHsv(this._r!, this._g!, this._b!);
+  }
+
+  protected _hwb(): [number, number, number] {
+    return RGB._rgbToHwb(this._r!, this._g!, this._b!);
   }
 
   protected _parse(color: string): void {
@@ -121,22 +150,6 @@ export default class RGB extends Color {
     }
 
     throw new Error("Invalid color");
-  }
-
-  protected _cmyk(): [number, number, number, number] {
-    return RGB.rgbToCmyk(this._r!, this._g!, this._b!);
-  }
-
-  protected _hsl(): [number, number, number] {
-    return RGB.rgbToHsl(this._r!, this._g!, this._b!);
-  }
-
-  protected _hsv(): [number, number, number] {
-    return RGB.rgbToHsv(this._r!, this._g!, this._b!);
-  }
-
-  protected _hwb(): [number, number, number] {
-    return RGB.rgbToHwb(this._r!, this._g!, this._b!);
   }
 
   protected _rgb(): [number, number, number] {

@@ -3,55 +3,68 @@ import HSL from "./hsl";
 import HSV from "./hsv";
 import RGB from "./rgb";
 import Color from "./color";
+import type { HWBObject } from "./types";
 
 /**
  * A color in the HWB color space.
  */
 export default class HWB extends Color {
-  constructor(param: string | { h: number; w: number; b: number }) {
+  constructor(param: string | HWBObject) {
     super(param);
 
     this._space = "hwb";
     if (typeof param === "string") {
       this._parse(param);
     } else {
-      this._h = param.h;
-      this._w = param.w;
-      this._k = param.b;
+      this._h = param.hue;
+      this._w = param.whiteness;
+      this._k = param.blackness;
     }
-  }
-
-  cmyk(): Color {
-    return new CMYK({
-      c: this.cyan,
-      m: this.magenta,
-      y: this.yellow,
-      k: this.blackness,
-    });
-  }
-
-  hsl(): Color {
-    return new HSL({ h: this.hue, s: this.saturation, l: this.lightness });
-  }
-
-  hsv(): Color {
-    return new HSV({ h: this.hue, s: this.saturation, v: this.brightness });
-  }
-
-  hwb(): Color {
-    return this;
-  }
-
-  rgb(): Color {
-    return new RGB({ r: this.red, g: this.green, b: this.blue });
   }
 
   get array(): number[] {
     return [this.hue, this.whiteness, this.blackness];
   }
 
+  cmyk(): Color {
+    return new CMYK({
+      cyan: this.cyan,
+      magenta: this.magenta,
+      yellow: this.yellow,
+      key: this.blackness,
+    });
+  }
+
+  hsl(): Color {
+    return new HSL({
+      hue: this.hue,
+      saturation: this.saturation,
+      lightness: this.lightness,
+    });
+  }
+
+  hsv(): Color {
+    return new HSV({
+      hue: this.hue,
+      saturation: this.saturation,
+      value: this.brightness,
+    });
+  }
+
+  hwb(): Color {
+    return this;
+  }
+
   get object(): { [key: string]: number } {
-    return { h: this.hue, w: this.whiteness, b: this.blackness };
+    return {
+      hue: this.hue,
+      whiteness: this.whiteness,
+      blackness: this.blackness,
+    };
+  }
+
+  rgb(): Color {
+    return new RGB({ red: this.red, green: this.green, blue: this.blue });
   }
 
   get string(): string {
@@ -62,7 +75,7 @@ export default class HWB extends Color {
 
   protected _cmyk(): [number, number, number, number] {
     const [r, g, b] = this._rgb();
-    return HSV.rgbToCmyk(r, g, b);
+    return HSV._rgbToCmyk(r, g, b);
   }
 
   protected _hsl(): [number, number, number] {
@@ -101,11 +114,6 @@ export default class HWB extends Color {
     return [this._h!, this._w!, this._k!];
   }
 
-  protected _rgb(): [number, number, number] {
-    const [h, s, v] = this._hsv();
-    return HSV.hsvToRgb(h, s, v);
-  }
-
   protected _parse(color: string): void {
     const match = color.match(/^hwb\((\d+),\s*(\d+)%?,\s*(\d+)%?\)$/);
 
@@ -117,5 +125,10 @@ export default class HWB extends Color {
     }
 
     throw new Error("Invalid color");
+  }
+
+  protected _rgb(): [number, number, number] {
+    const [h, s, v] = this._hsv();
+    return HSV._hsvToRgb(h, s, v);
   }
 }

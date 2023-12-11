@@ -3,23 +3,28 @@ import HSV from "./hsv";
 import HWB from "./hwb";
 import RGB from "./rgb";
 import Color from "./color";
+import type { CMYKObject } from "./types";
 
 /**
  * A color in the CMYK color space.
  */
 export default class CMYK extends Color {
-  constructor(param: string | { c: number; m: number; y: number; k: number }) {
+  constructor(param: string | CMYKObject) {
     super(param);
 
     this._space = "cmyk";
     if (typeof param === "string") {
       this._parse(param);
     } else {
-      this._c = param.c;
-      this._m = param.m;
-      this._y = param.y;
-      this._k = param.k;
+      this._c = param.cyan;
+      this._m = param.magenta;
+      this._y = param.yellow;
+      this._k = param.key;
     }
+  }
+
+  get array(): number[] {
+    return [this.cyan, this.magenta, this.yellow, this.blackness];
   }
 
   cmyk(): Color {
@@ -27,27 +32,40 @@ export default class CMYK extends Color {
   }
 
   hsl(): Color {
-    return new HSL({ h: this.hue, s: this.saturation, l: this.lightness });
+    return new HSL({
+      hue: this.hue,
+      saturation: this.saturation,
+      lightness: this.lightness,
+    });
   }
 
   hsv(): Color {
-    return new HSV({ h: this.hue, s: this.saturation, v: this.brightness });
+    return new HSV({
+      hue: this.hue,
+      saturation: this.saturation,
+      value: this.brightness,
+    });
   }
 
   hwb(): Color {
-    return new HWB({ h: this.hue, w: this.whiteness, b: this.blackness });
-  }
-
-  rgb(): Color {
-    return new RGB({ r: this.red, g: this.green, b: this.blue });
-  }
-
-  get array(): number[] {
-    return [this.cyan, this.magenta, this.yellow, this.blackness];
+    return new HWB({
+      hue: this.hue,
+      whiteness: this.whiteness,
+      blackness: this.blackness,
+    });
   }
 
   get object(): { [key: string]: number } {
-    return { c: this.cyan, m: this.magenta, y: this.yellow, k: this.blackness };
+    return {
+      cyan: this.cyan,
+      magenta: this.magenta,
+      yellow: this.yellow,
+      key: this.blackness,
+    };
+  }
+
+  rgb(): Color {
+    return new RGB({ red: this.red, green: this.green, blue: this.blue });
   }
 
   get string(): string {
@@ -62,27 +80,17 @@ export default class CMYK extends Color {
 
   protected _hsl(): [number, number, number] {
     const [r, g, b] = this._rgb();
-    return CMYK.rgbToHsl(r, g, b);
+    return CMYK._rgbToHsl(r, g, b);
   }
 
   protected _hsv(): [number, number, number] {
     const [r, g, b] = this._rgb();
-    return CMYK.rgbToHsv(r, g, b);
+    return CMYK._rgbToHsv(r, g, b);
   }
 
   protected _hwb(): [number, number, number] {
     const [r, g, b] = this._rgb();
-    return CMYK.rgbToHwb(r, g, b);
-  }
-
-  protected _rgb(): [number, number, number] {
-    const [c, m, y, k] = [this._c!, this._m!, this._y!, this._k!];
-
-    const r = 255 * (1 - c) * (1 - k);
-    const g = 255 * (1 - m) * (1 - k);
-    const b = 255 * (1 - y) * (1 - k);
-
-    return [r, g, b];
+    return CMYK._rgbToHwb(r, g, b);
   }
 
   protected _parse(color: string): void {
@@ -99,5 +107,15 @@ export default class CMYK extends Color {
     }
 
     throw new Error("Invalid color");
+  }
+
+  protected _rgb(): [number, number, number] {
+    const [c, m, y, k] = [this._c!, this._m!, this._y!, this._k!];
+
+    const r = 255 * (1 - c) * (1 - k);
+    const g = 255 * (1 - m) * (1 - k);
+    const b = 255 * (1 - y) * (1 - k);
+
+    return [r, g, b];
   }
 }
