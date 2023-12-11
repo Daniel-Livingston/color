@@ -1,3 +1,5 @@
+import { keywords } from "./keywords";
+
 export type AdjustableColorValues =
   | AdjustableHSLValues
   | AdjustableHWBValues
@@ -43,6 +45,8 @@ export type HWBObject = {
   whiteness: number;
   blackness: number;
 };
+
+export type Keyword = keyof typeof keywords;
 
 export type RGBObject = {
   red: number;

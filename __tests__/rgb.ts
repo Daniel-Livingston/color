@@ -31,6 +31,18 @@ describe("constructor()", () => {
       expect(c.blue).toBe(color.rgb[2]);
     });
   });
+
+  it("should parse a color keyword", () => {
+    expect(new Color("red").hex).toBe("#ff0000");
+    expect(new Color("violet").hex).toBe("#ee82ee");
+  });
+
+  it("should throw an error if the color is invalid", () => {
+    expect(() => new Color("#ffff")).toThrow();
+    expect(() => new Color("#ff")).toThrow();
+    expect(() => new Color("foo")).toThrow();
+    expect(() => new Color("rgb(100, 200, 100")).toThrow();
+  });
 });
 
 describe("get array()", () => {

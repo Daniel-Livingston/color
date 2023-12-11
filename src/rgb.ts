@@ -2,8 +2,9 @@ import CMYK from "./cmyk";
 import HSL from "./hsl";
 import HSV from "./hsv";
 import HWB from "./hwb";
+import { keywords } from "./keywords";
 import Color from "./color";
-import type { RGBObject } from "./types";
+import type { Keyword, RGBObject } from "./types";
 
 /**
  * A color in the RGB color space.
@@ -98,6 +99,11 @@ export default class RGB extends Color {
       return;
     }
 
+    if (color in keywords) {
+      this._parseKeywords(<Keyword>color);
+      return;
+    }
+
     throw new Error("Invalid color");
   }
 
@@ -136,6 +142,11 @@ export default class RGB extends Color {
     this._r = r;
     this._g = g;
     this._b = b;
+  }
+
+  /** A helper function to parse a keyword color. e.g., `'red'` */
+  private _parseKeywords(color: Keyword) {
+    return this._parseHexLong(keywords[color]);
   }
 
   /** A helper function to parse an RGB value. e.g., `rgb(0, 0, 0)`. */
