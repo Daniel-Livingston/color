@@ -184,18 +184,18 @@ describe("grayscale()", () => {
   });
 });
 
-describe("inverse()", () => {
+describe("invert()", () => {
   it("should return the inverse of the color", () => {
-    expect(Color({ red: 255, green: 0, blue: 0 }).inverse().array).toEqual([
+    expect(Color({ red: 255, green: 0, blue: 0 }).invert().array).toEqual([
       0, 255, 255,
     ]);
-    expect(Color({ red: 0, green: 255, blue: 0 }).inverse().array).toEqual([
+    expect(Color({ red: 0, green: 255, blue: 0 }).invert().array).toEqual([
       255, 0, 255,
     ]);
-    expect(Color({ red: 0, green: 0, blue: 255 }).inverse().array).toEqual([
+    expect(Color({ red: 0, green: 0, blue: 255 }).invert().array).toEqual([
       255, 255, 0,
     ]);
-    expect(Color("#b37399").inverse().array).toEqual([76, 140, 102]);
+    expect(Color("#b37399").invert().array).toEqual([76, 140, 102]);
   });
 });
 

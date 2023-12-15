@@ -277,7 +277,7 @@ export default abstract class Color {
   /**
    * Returns the inverse of this color in the RGB color space.
    */
-  inverse(): Color {
+  invert(): Color {
     return this.change({
       red: 255 - this.red,
       green: 255 - this.green,
