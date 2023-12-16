@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/Daniel-Livingston/color/issues"
   },
-  "homepage": "https://github.com/Daniel-Livingston/color#readme",
+  "homepage": "https://daniel-livingston.github.io/color/",
   "devDependencies": {
     "@types/jest": "^29.5.11",
     "jest": "^29.7.0",
