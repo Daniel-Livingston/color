@@ -1,4 +1,4 @@
-## @daniel-livingston/color
+# @daniel-livingston/color
 
 A JavaScript library inspired by [the popular `color` library](https://www.npmjs.com/package/color) and [the `sass:color` module](https://sass-lang.com/documentation/modules/color/). Allows for immutable color conversion and manipulation without the use of any third-party libraries.
 
