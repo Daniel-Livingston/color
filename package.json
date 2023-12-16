@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "cd site && npm run dev",
-    "gh-pages": "cd site && npm run build && cd .. && npx gh-pages -d site/build",
+    "gh-pages": "cd site && npm run build && cd .. && npx gh-pages --nojekyll -d site/build",
     "coverage": "jest --coverage",
     "postinstall": "cd site && npm install",
     "test": "jest"
