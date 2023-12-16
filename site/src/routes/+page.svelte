@@ -5,6 +5,14 @@
 	export let data: PageServerData;
 </script>
 
+<svelte:head>
+	<title>Documentation | @daniellivingston/color</title>
+	<meta
+		name="description"
+		content="Documentation for @daniellivingston/color, a color conversion and manipulation library for JavaScript and TypeScript."
+	/>
+</svelte:head>
+
 <div class="layout">
 	<nav class="toc">
 		<div class="toc-header">Contents</div>
@@ -53,6 +61,12 @@
 			font-size: 1.25rem;
 			font-weight: 700;
 			margin-bottom: 1rem;
+		}
+
+		.toc :global(a) {
+			display: block;
+			font-size: 1.125rem;
+			padding: 0.25rem;
 		}
 
 		.content {

@@ -15,7 +15,6 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
-		"@iconify/svelte": "^3.1.4",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-static": "^3.0.0",
