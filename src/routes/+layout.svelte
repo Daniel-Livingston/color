@@ -1,6 +1,6 @@
 <script lang="ts">
 	import './reset.css';
-	import Nav from '$lib/Nav.svelte';
+	import Nav from './Nav.svelte';
 </script>
 
 <main>

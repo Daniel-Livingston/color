@@ -7,7 +7,7 @@ import { gfmHeadingId } from 'marked-gfm-heading-id';
 import { markedHighlight } from 'marked-highlight';
 // @ts-expect-error - no types
 import generateTOC from 'markdown-toc';
-import markdown from '../../../README.md?raw';
+import markdown from '../../README.md?raw';
 
 const marked = new Marked(
 	markedHighlight({

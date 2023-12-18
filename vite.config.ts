@@ -4,6 +4,10 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
 	plugins: [sveltekit()],
 	test: {
+		coverage: {
+			exclude: ['src/lib/types.ts'],
+			include: ['src/lib/**/*.ts']
+		},
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	}
 });

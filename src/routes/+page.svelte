@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { PageServerData } from './$types';
-	import './highlight.css';
 
 	export let data: PageServerData;
 </script>
@@ -24,6 +23,8 @@
 </div>
 
 <style>
+	@import 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css';
+
 	.layout {
 		padding-inline: 1rem;
 	}

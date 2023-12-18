@@ -11,32 +11,32 @@ npm install @daniel-livingston/color
 ## Usage
 
 ```js
-import Color from "@daniel-livingston/color";
+import Color from '@daniel-livingston/color';
 ```
 
 ### Constructors
 
 ```js
 // RGB
-const color = Color("white"); // rgb(255, 255, 255)
-const color = Color("#ffffff"); // rgb(255, 255, 255)
-const color = Color("rgb(255, 255, 255)"); // rgb(255, 255, 255)
+const color = Color('white'); // rgb(255, 255, 255)
+const color = Color('#ffffff'); // rgb(255, 255, 255)
+const color = Color('rgb(255, 255, 255)'); // rgb(255, 255, 255)
 const color = Color({ red: 255, green: 255, blue: 255 }); // rgb(255, 255, 255)
 
 // CMYK
-const color = Color("cmyk(0%, 0%, 0%, 0%)"); // cmyk(0%, 0%, 0%, 0%)
+const color = Color('cmyk(0%, 0%, 0%, 0%)'); // cmyk(0%, 0%, 0%, 0%)
 const color = Color({ cyan: 0, magenta: 0, yellow: 0, key: 0 }); // cmyk(0%, 0%, 0%, 0%)
 
 // HSL
-const color = Color("hsl(0, 0%, 100%)"); // hsl(0, 0%, 100%)
+const color = Color('hsl(0, 0%, 100%)'); // hsl(0, 0%, 100%)
 const color = Color({ hue: 0, saturation: 0, lightness: 1 }); // hsl(0, 0%, 100%)
 
 // HSV
-const color = Color("hsv(0, 0%, 100%)"); // hsv(0, 0%, 100%)
+const color = Color('hsv(0, 0%, 100%)'); // hsv(0, 0%, 100%)
 const color = Color({ hue: 0, saturation: 0, value: 1 }); // hsv(0, 0%, 100%)
 
 // HWB
-const color = Color("hwb(0, 100%, 0%)"); // hwb(0, 100%, 0%)
+const color = Color('hwb(0, 100%, 0%)'); // hwb(0, 100%, 0%)
 const color = Color({ hue: 0, whiteness: 1, blackness: 0 }); // hwb(0, 100%, 0%)
 ```
 
@@ -173,10 +173,10 @@ Returns a color that is a mixture of the original color and a second color.
 The weight should be between `0` and `1` inclusive. A smaller weight indicates that more of the original color should be used. A larger weight indicates that more of the input color should be used.
 
 ```js
-const color = Color("#036");
+const color = Color('#036');
 
-color.mix(Color("#d2e1dd")); // #698aa2
-color.mix(Color("#d2e1dd"), 0.75); // #355f84
+color.mix(Color('#d2e1dd')); // #698aa2
+color.mix(Color('#d2e1dd'), 0.75); // #355f84
 ```
 
 #### `scale`
@@ -200,7 +200,7 @@ Scales one or more properties of a color.
 Each keyword argument must be a number between `-1` and `1` inclusive. This indicates how far the corresponding property must be moved from its original position towards the maximum or the minimum.
 
 ```js
-const color = Color("#6b717f");
+const color = Color('#6b717f');
 
 color.scale({ saturation: 0.8, lightness: -0.3 }); // #0f3795
 ```
@@ -219,21 +219,21 @@ Get an array of the color's values in the current color space.
 
 ```js
 // RGB
-Color("red").array; // [255, 0, 0]
-Color("#ff0000").array; // [255, 0, 0]
-Color("rgb(255, 0, 0)").array; // [255, 0, 0]
+Color('red').array; // [255, 0, 0]
+Color('#ff0000').array; // [255, 0, 0]
+Color('rgb(255, 0, 0)').array; // [255, 0, 0]
 
 // CMYK
-Color("cmyk(100%, 0%, 0%, 50%)").array; // [1, 0, 0, 0.5]
+Color('cmyk(100%, 0%, 0%, 50%)').array; // [1, 0, 0, 0.5]
 
 // HSL
-Color("hsl(240, 100%, 50%)").array; // [240, 1, 0.5]
+Color('hsl(240, 100%, 50%)').array; // [240, 1, 0.5]
 
 // HSV
-Color("hsv(240, 100%, 50%)").array; // [240, 1, 0.5]
+Color('hsv(240, 100%, 50%)').array; // [240, 1, 0.5]
 
 // HWB
-Color("hwb(240, 100%, 50%)").array; // [240, 1, 0.5]
+Color('hwb(240, 100%, 50%)').array; // [240, 1, 0.5]
 ```
 
 #### `blackness`
@@ -277,7 +277,7 @@ color.hex: string;
 The hex value of the color.
 
 ```js
-Color("red").hex; // #ff0000
+Color('red').hex; // #ff0000
 ```
 
 #### `hue`
@@ -314,21 +314,21 @@ Get an object representation of the color's values in the current color space.
 
 ```js
 // RGB
-Color("red").object; // { red: 255, green: 0; blue: 0 }
-Color("#ff0000").object; // { red: 255, green: 0; blue: 0 }
-Color("rgb(255, 0, 0)").object; // { red: 255, green: 0; blue: 0 }
+Color('red').object; // { red: 255, green: 0; blue: 0 }
+Color('#ff0000').object; // { red: 255, green: 0; blue: 0 }
+Color('rgb(255, 0, 0)').object; // { red: 255, green: 0; blue: 0 }
 
 // CMYK
-Color("cmyk(100%, 0%, 0%, 50%)").object; // { cyan: 1, magenta: 0, yellow: 0, key: 0.5 }
+Color('cmyk(100%, 0%, 0%, 50%)').object; // { cyan: 1, magenta: 0, yellow: 0, key: 0.5 }
 
 // HSL
-Color("hsl(240, 100%, 50%)").object; // { hue: 240, saturation: 1, lightness: 0.5 }
+Color('hsl(240, 100%, 50%)').object; // { hue: 240, saturation: 1, lightness: 0.5 }
 
 // HSV
-Color("hsv(240, 100%, 50%)").object; // { hue: 240, saturation: 1, value: 0.5 }
+Color('hsv(240, 100%, 50%)').object; // { hue: 240, saturation: 1, value: 0.5 }
 
 // HWB
-Color("hwb(240, 100%, 50%)").object; // { hue: 240, whiteness: 1, blackness: 0.5 }
+Color('hwb(240, 100%, 50%)').object; // { hue: 240, whiteness: 1, blackness: 0.5 }
 ```
 
 #### `red`
@@ -357,21 +357,21 @@ Get a string representation of the color's values in the current color space.
 
 ```js
 // RGB
-Color("red").string; // rgb(255, 0, 0)
-Color("#ff0000").string; // rgb(255, 0, 0)
-Color("rgb(255, 0, 0)").string; // rgb(255, 0, 0)
+Color('red').string; // rgb(255, 0, 0)
+Color('#ff0000').string; // rgb(255, 0, 0)
+Color('rgb(255, 0, 0)').string; // rgb(255, 0, 0)
 
 // CMYK
-Color("cmyk(100%, 0%, 0%, 50%)").string; // cmyk(100%, 0%, 0%, 50%)
+Color('cmyk(100%, 0%, 0%, 50%)').string; // cmyk(100%, 0%, 0%, 50%)
 
 // HSL
-Color("hsl(240, 100%, 50%)").string; // hsl(240, 100%, 50%)
+Color('hsl(240, 100%, 50%)').string; // hsl(240, 100%, 50%)
 
 // HSV
-Color("hsv(240, 100%, 50%)").string; // hsv(240, 100%, 50%)
+Color('hsv(240, 100%, 50%)').string; // hsv(240, 100%, 50%)
 
 // HWB
-Color("hwb(240, 100%, 50%)").string; // hwb(240, 100%, 50%)
+Color('hwb(240, 100%, 50%)').string; // hwb(240, 100%, 50%)
 ```
 
 #### `whiteness`
